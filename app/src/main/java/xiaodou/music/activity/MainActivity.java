@@ -106,16 +106,17 @@ public class MainActivity extends AppCompatActivity {
     private View.OnClickListener btnMediaGotoOnClick = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (mEditMediaGoto.getText().toString().equals("")){
+            //name != null && ！name.equals("")
+            if ((mEditMediaGoto.getText().toString() == null) || (mEditMediaGoto.getText().toString().trim().length() == 0)){
                 Toast.makeText(MainActivity.this, "请先输入要播放的位置(单位是秒)", Toast.LENGTH_SHORT).show();
+            }else {
+                int seconds = Integer.parseInt(mEditMediaGoto.getText().toString());
+
+                Intent it = new Intent(MainActivity.this, MediaPlayerService.class);
+                it.setAction(MediaPlayerService.ACTION_GOTO);
+                it.putExtra("GOTO_POSITION_SECONDS", seconds);
+                startService(it);
             }
-
-            int seconds = Integer.parseInt(mEditMediaGoto.getText().toString());
-
-            Intent it = new Intent(MainActivity.this, MediaPlayerService.class);
-            it.setAction(MediaPlayerService.ACTION_GOTO);
-            it.putExtra("GOTO_POSITION_SECONDS", seconds);
-            startService(it);
 
             mEditMediaGoto.setText("");
 
